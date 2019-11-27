@@ -2,7 +2,7 @@
   "name": "cookagen",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "dependencies": {
     "@octokit/rest": "^16.35.0",
     "chalk": "^3.0.0",
@@ -17,9 +17,12 @@
     "simple-git": "^1.126.0",
     "touch": "^3.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^12.12.14"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "b": "tsc"
   },
   "keywords": [],
   "author": "",
