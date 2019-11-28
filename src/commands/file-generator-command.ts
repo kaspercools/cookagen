@@ -105,7 +105,7 @@ export class FileGeneratorCommand implements ICommand {
 
 
         if (fs.existsSync(filePath)) {
-          console.log(chalk.red("Already created!"));
+          console.log(chalk.red(`I already created this file! (${filePath})`));
 
           // Do something
           process.exit();

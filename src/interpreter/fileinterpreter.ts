@@ -18,7 +18,7 @@ export class FileInterpreter {
 
     if (res != null) {
       patternDataList.forEach(pattern => {
-        if (res[0] == `{{${pattern.match}}}`) {
+        if (res[0].includes(`{{${pattern.match}`)) {
           const expressionString = res[0].replace(' ', '').trim().replace("{{", "").replace("}}", "");
 
           var resExpression = expressionInterpreter.interpret(expressionString);
@@ -30,6 +30,7 @@ export class FileInterpreter {
           fileData = fileData.replace(res[0], result);
         }
       });
+      
       const interpretVal = this.interpret(fileData, patternDataList);
       return interpretVal;
     }else{

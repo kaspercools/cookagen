@@ -7,7 +7,7 @@ namespace LegalRegister.Validation.{{$ENTITY | plural}}
     {
         public {{$CMD}}{{$ENTITY}}Validator()
         {
-            RuleFor({{$ENTITY | lowerCase}} => {{$ENTITY | | lowerCase}}.Name).NotNull();
+            RuleFor({{$ENTITY | lowerCase}} => {{$ENTITY | lowerCase}}.Name).NotNull();
         }
     }
 }
