@@ -111,27 +111,10 @@ export class MethodGeneratorCommand implements ICommand {
           _.cloneDeep(this.patternDataList)
         );
 
-        console.log(methodString);
-        console.log(classString);
-
-        classString = classString.replace(`${this.entryPoint}`, `\t${methodString}\n\n\t\t${this.entryPoint}`);
-        fs.writeFileSync(filePath, classString, 'utf8');
-        console.log(classString);
-
-        // fs.writeFile(
-        //   filePath,
-        //   new FileInterpreter().interpretFile(
-        //     methodString.toString(),
-        //     this.patternDataList
-        //   ),
-        //   function (err: any) {
-        //     if (err) {
-        //       return console.log(err);
-        //     }
-
-        //     console.log(chalk.yellow(`The file was saved! (${filePath})`));
-        //   }
-        // );
+        if (!classString.includes(methodString)) {
+          classString = classString.replace(`${this.entryPoint}`, `\t${methodString}\n\n\t\t${this.entryPoint}`);
+          fs.writeFileSync(filePath, classString, 'utf8');
+        }
       }
     );
 

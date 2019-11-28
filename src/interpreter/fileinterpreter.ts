@@ -30,7 +30,6 @@ export class FileInterpreter {
           fileData = fileData.replace(res[0], result);
         }
       });
-
       const interpretVal = this.interpret(fileData, patternDataList);
       return interpretVal;
     } else {
