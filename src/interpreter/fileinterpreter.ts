@@ -1,33 +1,38 @@
 import { ExpressionInterpreter } from "./expression-builder";
 import { PatternData } from "../pattern-data";
+import * as _ from 'lodash';
 
 export class FileInterpreter {
   public interpretFile(fileData: any, patternDataList: PatternData[]): string {
-    patternDataList.forEach((patternData: PatternData) => {
-      fileData = this.interpret(fileData, patternData.val, patternData.match);
-    });
+
+    fileData = this.interpret(fileData, patternDataList);
+
     return fileData;
   }
 
-  private interpret(fileData: any, data: any, pattern: string): string {
+  private interpret(fileData: any, patternDataList: PatternData[]): string {
+
     const expressionInterpreter = new ExpressionInterpreter();
 
     var res = fileData.match(/[\{]{2}\$\w* *[\|]* *\w+[\}]{2}|[\{]{2}\$\w*[\|]*\w+[\}]{2}/i);
-    
-    if (res != null && fileData.includes(pattern)) {
-      const expressionString = res[0].replace(' ','').trim().replace("{{", "").replace("}}", "");
-      
-      var resExpression = expressionInterpreter.interpret(expressionString);
-      
-      var result = resExpression.interpret(
-        (expressionString + "").replace(' ','').split("|")[0],
-        data
-      );    
-      
-      fileData = fileData.replace(res[0], result);
-      
-      return this.interpret(fileData, data, pattern);
-    } else {
+
+    if (res != null) {
+      patternDataList.forEach(pattern => {
+        if (res[0] == `{{${pattern.match}}}`) {
+          const expressionString = res[0].replace(' ', '').trim().replace("{{", "").replace("}}", "");
+
+          var resExpression = expressionInterpreter.interpret(expressionString);
+
+          var result = resExpression.interpret(
+            (expressionString + "").replace(' ', '').split("|")[0],
+            _.cloneDeep(pattern.val)
+          );
+          fileData = fileData.replace(res[0], result);
+        }
+      });
+      const interpretVal = this.interpret(fileData, patternDataList);
+      return interpretVal;
+    }else{
       return fileData;
     }
   }

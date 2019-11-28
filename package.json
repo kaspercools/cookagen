@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^16.35.0",
+    "@types/lodash": "^4.14.149",
     "chalk": "^3.0.0",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
