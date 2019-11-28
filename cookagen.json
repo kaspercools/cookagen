@@ -108,7 +108,7 @@
                         {"file":"ivalidationfactory.tpl", "target":"IValidatorFactory.cs"},
                         {"file":"validationfactory.tpl", "target": "ValidatorFactory.cs"}
                     ],
-                    "entryPoint": "//$cookagen$",
+                    "entryPoint": "$cookagen$",
                     "ext": "cs",
                     "parseList": [
                         {
