@@ -7,6 +7,7 @@ import { FileInterpreter } from "../interpreter/fileinterpreter";
 import { PatternData } from "../pattern-data";
 var fs = require("fs");
 import * as _ from 'lodash';
+import { createWriteStream } from "fs";
 var chalk = require("chalk");
 
 export class MethodGeneratorCommand implements ICommand {
@@ -112,8 +113,9 @@ export class MethodGeneratorCommand implements ICommand {
         );
 
         if (!classString.includes(methodString)) {
-          classString = classString.replace(`${this.entryPoint}`, `${methodString}\n\n\t\t${this.entryPoint}`);
+          classString = classString.replace(`${this.entryPoint}`, `${methodString}\n\t\t${this.entryPoint}`);
           fs.writeFileSync(filePath, classString, 'utf8');
+          console.log(chalk.greenBright(`I altered ${template.target} (${filePath})`));
         }
       }
     );

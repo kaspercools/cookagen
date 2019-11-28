@@ -108,10 +108,10 @@ export class FileGeneratorCommand implements ICommand {
 
 
         if (fs.existsSync(filePath)) {
-          console.log(chalk.red(`I already created this file! (${filePath})`));
+          console.log(chalk.red(`You already created this file! (${filePath})`));
 
           // Do something
-          process.exit();
+          return;
         } else if (!fs.existsSync(folderPath)) {
           fs.mkdirSync(folderPath);
         }
@@ -144,8 +144,6 @@ export class FileGeneratorCommand implements ICommand {
     this.methodChainList.forEach((methodInChain: any) => {
       methodInChain(entryList)
     });
-
-
   }
   getFileName(
     filePath: string
