@@ -133,8 +133,6 @@ Alterations can be used to add extra functionality to existing files.
 ]
 ```
 
-//TODO
-
 ## Expressions
 Within a template file you can refer to a placeholder ([see ParseList](#parselist)) as follows:
 ```

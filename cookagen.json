@@ -45,6 +45,30 @@
             ]
         },
         {
+            "cmd": "repo",
+            "alias": "r",
+            "targetFolder": "LegalRegister.Repositories/{{$ENTITY}}",
+            "autoCreateFolders": true,
+            "templateRoot": "repositories",
+            "templates": [
+                {
+                    "file": "repository.tpl",
+                    "resFile": "{{$ENTITY}}Repository"
+                },
+                {
+                    "file": "irepository.tpl",
+                    "resFile": "I{{$ENTITY}}Repository"
+                }
+            ],
+            "ext": "cs",
+            "parseList": [
+                {
+                    "val": "entity",
+                    "match": "$ENTITY"
+                }
+            ]
+        },
+        {
             "cmd": "service",
             "alias": "s",
             "targetFolder": "Services/{{$ENTITY}}",

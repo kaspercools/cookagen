@@ -98,7 +98,6 @@ cookagenConfig.generators.forEach((generator: any) => {
     .description("creates a class")
     .action((entryList: any) => {
       cmd.action(entryList);
-
     });
 });
 

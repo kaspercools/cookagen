@@ -1,9 +1,15 @@
 import { ICommand } from "./icommand";
 import { FileInterpreter } from "../interpreter/fileinterpreter";
+<<<<<<< HEAD
 import { PatternData } from "../pattern-data";
 import * as _ from "lodash";
 import { MethodGeneratorCommand } from "./method-generator-command";
 import { GeneratorCommand } from "./generator-command";
+=======
+import { PatternData } 
+from "../pattern-data";
+import * as _ from 'lodash';  
+>>>>>>> 98dbdff (started adding factory method generation)
 
 var fs = require("fs");
 var chalk = require("chalk");
@@ -83,6 +89,8 @@ export class FileGeneratorCommand extends GeneratorCommand implements ICommand {
           this.destPath
         )}`;
         const filePath = `${folderPath}/${destFileName}.${this.fileExt}`;
+
+
 
         if (fs.existsSync(filePath)) {
           console.log(
