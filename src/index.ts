@@ -59,8 +59,7 @@ cookagenConfig.generators.forEach((generator: any) => {
     generator.autoCreateFolders
   );
 
-  cmdMap.set(generator.cmd, cmd);
-
+  
   //create alterations
   let alterations:MethodGeneratorCommand[]=[];
   if (generator.alterations) {
@@ -79,9 +78,12 @@ cookagenConfig.generators.forEach((generator: any) => {
         _.cloneDeep(element.parseList),
         [],
         element.autoCreateFolders
-      );
-    })
-  };
+        );
+      })
+      cmd.setAlterations(alterations);
+    };
+    
+    cmdMap.set(generator.cmd, cmd);
 
   program
     .command(`${generator.cmd} [entryList...]`)
@@ -89,9 +91,7 @@ cookagenConfig.generators.forEach((generator: any) => {
     .description("creates a class")
     .action((entryList: any) => {
       cmd.action(entryList);
-      alterations.forEach((alteration: MethodGeneratorCommand) => {
-        alteration.action(entryList);
-      });
+      
     });
 });
 

@@ -4,14 +4,17 @@ import { CamelCaseExpression } from "../interpreter/camelcase-expression";
 import DataExpression from "../interpreter/temrinal-expression";
 import { PascalCaseExpression } from "../interpreter/pascalcase-expression";
 import { FileInterpreter } from "../interpreter/fileinterpreter";
-import { PatternData } 
-from "../pattern-data";
-import * as _ from 'lodash';  
+import { PatternData }
+  from "../pattern-data";
+import * as _ from 'lodash';
+import { MethodGeneratorCommand } from "./method-generator-command copy";
 
 var fs = require("fs");
 var chalk = require("chalk");
 
 export class FileGeneratorCommand implements ICommand {
+
+  alterations: MethodGeneratorCommand[] = [];
   destPath: string;
   subType: string;
   subTypeFiles: { file: string; resFile: string; }[];
@@ -134,14 +137,19 @@ export class FileGeneratorCommand implements ICommand {
       }
     );
 
+    this.alterations.forEach((alteration: MethodGeneratorCommand) => {
+      alteration.action(entryList);
+    });
+
     this.methodChainList.forEach((methodInChain: any) => {
       methodInChain(entryList)
     });
+
+
   }
   getFileName(
     filePath: string
   ) {
-
 
     let result = filePath;
     const expInterpreter = new ExpressionInterpreter();
@@ -153,5 +161,9 @@ export class FileGeneratorCommand implements ICommand {
     });
 
     return result;
+  }
+
+  setAlterations(alterations: MethodGeneratorCommand[]) {
+    this.alterations = alterations;
   }
 }

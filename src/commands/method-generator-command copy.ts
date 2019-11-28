@@ -112,7 +112,7 @@ export class MethodGeneratorCommand implements ICommand {
         );
 
         if (!classString.includes(methodString)) {
-          classString = classString.replace(`${this.entryPoint}`, `\t${methodString}\n\n\t\t${this.entryPoint}`);
+          classString = classString.replace(`${this.entryPoint}`, `${methodString}\n\n\t\t${this.entryPoint}`);
           fs.writeFileSync(filePath, classString, 'utf8');
         }
       }

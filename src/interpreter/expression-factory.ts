@@ -4,6 +4,7 @@ import { LowerCaseExpression } from "./lowercase-expression";
 import { CamelCaseExpression } from "./camelcase-expression";
 import { NoExpression } from "./no-expression";
 import { PluralExpression } from "./plural-expression";
+import { PascalCaseExpression } from "./pascalcase-expression";
 
 export class ExpressionFactory {
   createExpressionTree(expressions: string[]): IExpression {
@@ -28,6 +29,9 @@ export class ExpressionFactory {
         break;
       case "camelCase":
         expression = new CamelCaseExpression(data);
+        break;
+      case "pascalCase":
+        expression = new PascalCaseExpression(data);
         break;
       case "plural":
         expression = new PluralExpression(data);
