@@ -8,6 +8,7 @@ import { PatternData }
   from "../pattern-data";
 import * as _ from 'lodash';
 import { MethodGeneratorCommand } from "./method-generator-command copy";
+import { IExpression } from "../interpreter/abstract-interpreter";
 
 var fs = require("fs");
 var chalk = require("chalk");
@@ -137,26 +138,19 @@ export class FileGeneratorCommand implements ICommand {
       }
     );
 
-    this.alterations.forEach((alteration: MethodGeneratorCommand) => {
-      alteration.action(entryList);
-    });
-
     this.methodChainList.forEach((methodInChain: any) => {
       methodInChain(entryList)
+    });
+
+    this.alterations.forEach((alteration: MethodGeneratorCommand) => {
+      alteration.action(entryList);
     });
   }
   getFileName(
     filePath: string
   ) {
 
-    let result = filePath;
-    const expInterpreter = new ExpressionInterpreter();
-    this.patternDataList.forEach((currentPattern, index) => {
-
-      result = expInterpreter
-        .interpret(`{{${currentPattern.match}}}`)
-        .interpret(result, currentPattern.val);
-    });
+    const result = new FileInterpreter().interpret(filePath, this.patternDataList);
 
     return result;
   }

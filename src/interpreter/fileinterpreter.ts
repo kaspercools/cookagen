@@ -10,7 +10,7 @@ export class FileInterpreter {
     return fileData;
   }
 
-  private interpret(fileData: any, patternDataList: PatternData[]): string {
+  public interpret(fileData: any, patternDataList: PatternData[]): string {
 
     const expressionInterpreter = new ExpressionInterpreter();
 
