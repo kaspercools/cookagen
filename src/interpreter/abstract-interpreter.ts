@@ -1,3 +1,3 @@
 export interface IExpression{
-    interpret(context:string):string;
+    interpret(context:string, data:string):string;
 }

@@ -3,32 +3,32 @@ using LegalRegister.Domain;
 
 namespace LegalRegister.Services
 {
-    public class {{ENTITY}}Service : I{{ENTITY}}Service
+    public class {{$ENTITY}}Service : I{{$ENTITY}}Service
     {
-        private readonly {{ENTITY}}Repository _{(ENTITY | camelCase}};
+        private readonly {{$ENTITY}}Repository _{{$ENTITY | camelCase}}Repository;
 
-        public {{ENTITY}}Service({{ENTITY}}Repository {(ENTITY | camelCase}})
+        public {{$ENTITY}}Service({{$ENTITY}}Repository {{$ENTITY | camelCase}}Repository)
         {
-            _{(ENTITY | camelCase}} = {(ENTITY | camelCase}};
+            _{{$ENTITY | camelCase}}Repository = {{$ENTITY | camelCase}}Repository;
         }
 
-        public void Delete({{KEY}} id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public {{ENTITY}} GetById({{KEY}} id)
-        {
-            return _{(ENTITY | camelCase}}.Find(id);
-        }
-
-        public {{ENTITY}} Add({{ENTITY}} entity)
+        public void Delete({{$KEY}} id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<{{ENTITY}}>> Add({{}})){
-            return _{(ENTITY | camelCase}}.FindAll(id);
+        public {{$ENTITY}} GetById({{$KEY}} id)
+        {
+            return _{{$ENTITY | camelCase}}Repository.Find(id);
+        }
+
+        public {{$ENTITY}} Add({{$ENTITY}} entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<{{$ENTITY}}> GetAll(){
+            return _{{$ENTITY | camelCase}}Repository.FindAll(id);
         }
     }
 }

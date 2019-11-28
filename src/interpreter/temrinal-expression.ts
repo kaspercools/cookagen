@@ -1,19 +1,17 @@
-import {IExpression} from "./abstract-interpreter";
+import { IExpression } from "./abstract-interpreter";
 
-export default class DataExpression implements IExpression{
-    
-    private data:string;
-    private needle:string;
+export default class DataExpression implements IExpression {
+  private needle: string;
 
-    constructor(needle:string, data:string) {
-        this.data=data;
-        this.needle=needle;
+  constructor(needle: string) {
+    this.needle = needle;
+  }
+
+  interpret(context: string, data: string): string {
+    if (context.includes(this.needle)) {
+      context = context.replace(this.needle, data);
     }
 
-    interpret(context =''): string {
-        if(context == this.needle){
-           context = context.replace(this.needle,this.data);
-        }
-        return context;
-    }
+    return context;
+  }
 }

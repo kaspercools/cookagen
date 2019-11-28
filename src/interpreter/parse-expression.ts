@@ -10,7 +10,7 @@ export class ParseExpression implements IExpression{
         this.operation=operation;
     }
 
-    interpret(context: string): string {
-        return this.operation.interpret(this.subject.interpret(context));
+    interpret(context: string, data: string): string {
+        return this.operation.interpret(this.subject.interpret(context, data), data);
     }
 }

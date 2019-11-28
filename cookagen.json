@@ -1,0 +1,97 @@
+{
+    "templateFolder": "templates",
+    "generators": [
+        {
+            "cmd": "domain",
+            "alias": "d",
+            "targetFolder": "LegalRegister.Domain",
+            "templateRoot": "domain",
+            "templates": [
+                {
+                    "file": "entity.tpl",
+                    "resFile": "{{$ENTITY}}"
+                }
+            ],
+            "ext": "cs",
+            "parseList": [
+                {
+                    "val": "entity",
+                    "match": "$ENTITY"
+                }
+            ]
+        },
+        {
+            "cmd": "service",
+            "alias": "s",
+            "targetFolder": "LegalRegister.Services",
+            "templateRoot": "services",
+            "templates": [
+                {
+                    "file": "service.tpl",
+                    "resFile": "{{$ENTITY}}Service"
+                },
+                {
+                    "file": "iservice.tpl",
+                    "resFile": "I{{$ENTITY}}Service"
+                }
+            ],
+            "ext": "cs",
+            "parseList": [
+                {
+                    "val": "entity",
+                    "match": "$ENTITY"
+                },
+                {
+                    "val": "Guid",
+                    "match": "$KEY"
+                }
+            ]
+        },
+        {
+            "cmd": "repo",
+            "alias": "r",
+            "targetFolder": "LegalRegister.Repositories",
+            "templateRoot": "repositories",
+            "templates": [
+                {
+                    "file": "repository.tpl",
+                    "resFile": "{{$ENTITY}}Repository"
+                },
+                {
+                    "file": "irepository.tpl",
+                    "resFile": "I{{$ENTITY}}Repository"
+                }
+            ],
+            "ext": "cs",
+            "parseList": [
+                {
+                    "val": "entity",
+                    "match": "$ENTITY"
+                }
+            ]
+        },
+        {
+            "cmd": "validation",
+            "alias": "v",
+            "targetFolder": "LegalRegister.Validation",
+            "templateRoot": "validation",
+            "templates": [
+                {
+                    "file": "validator.tpl",
+                    "resFile": "{{$ENTITY}}{{CMD}}Validator"
+                }
+            ],
+            "ext": "cs",
+            "parseList": [
+                {
+                    "val": "command",
+                    "match": "$CMD"
+                },
+                {
+                    "val": "entity",
+                    "match": "$ENTITY"
+                }
+            ]
+        }
+    ]
+}

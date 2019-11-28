@@ -8,8 +8,8 @@ export class LowerCaseExpression implements IExpression{
         this.expression = expression;
     }
 
-    interpret(context: string): string {
-        const data = this.expression.interpret(context);
+    interpret(context: string, data:string): string {
+        data = this.expression.interpret(context, data);
         
         return data.toLowerCase();
     }

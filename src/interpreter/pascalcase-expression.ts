@@ -1,6 +1,6 @@
 import { IExpression } from "./abstract-interpreter";
 
-export class CamelCaseExpression implements IExpression{
+export class PascalCaseExpression implements IExpression{
     private expression:IExpression;
 
     constructor(expression:IExpression) {
@@ -10,7 +10,7 @@ export class CamelCaseExpression implements IExpression{
     interpret(context: string, data: string): string {
         const dataString = this.expression.interpret(context, data);
         
-        return dataString.charAt(0).toLowerCase() + dataString.substring(1);
+        return dataString.charAt(0).toUpperCase() + dataString.substring(1);
     }
 
 }
