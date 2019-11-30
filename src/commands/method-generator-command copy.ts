@@ -51,7 +51,7 @@ export class MethodGeneratorCommand implements ICommand {
     this.fileExt = fileExt;
     this.patternDataList = _.clone(patterns);//([]as any).push(patterns);
     this.methodChainList = methodChainList;
-    this.entryPoint = `//${entryPoint}`;
+    this.entryPoint = `/*${entryPoint}*/`;
     this.autoCreateFolders = (typeof (autoCreateFolders) === undefined) ? false : autoCreateFolders;
   }
 
@@ -69,23 +69,24 @@ export class MethodGeneratorCommand implements ICommand {
     );
 
     if (entryList.length == 0) {
-      console.log("NO ARGS... TRY AGAIN!");
+      console.log(chalk.red("NO ARGS... TRY AGAIN!"));
       process.exit();
     }
 
     const entity = entryList[0];
 
-    this.patternDataList.forEach((pattern, index) => {
-      if (entryList.length > index) {
-        pattern.val = entryList[index];
-      }
-    });
+
     this.templates.forEach(
       (
         template: { file: string, target: string },
         index
       ) => {
-        console.log("New Template run");
+        this.patternDataList.forEach((pattern, index) => {
+          if (entryList.length > index) {
+            pattern.val = entryList[index];
+          }
+        });
+        console.log(chalk.yellow("New Template run"));
 
         const path = `${process.cwd()}/${this.templatePath}/${this.subType}/${
           template.file
@@ -121,19 +122,13 @@ export class MethodGeneratorCommand implements ICommand {
     );
 
   }
-
-  private getFileName(
+  getFileName(
     filePath: string
   ) {
-    let result = filePath;
-    const expInterpreter = new ExpressionInterpreter();
-    this.patternDataList.forEach((currentPattern, index) => {
 
-      result = expInterpreter
-        .interpret(`{{${currentPattern.match}}}`)
-        .interpret(result, currentPattern.val);
-    });
+    const result = new FileInterpreter().interpret(filePath, this.patternDataList);
 
     return result;
   }
+
 }

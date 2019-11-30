@@ -9,6 +9,7 @@ import { PatternData }
 import * as _ from 'lodash';
 import { MethodGeneratorCommand } from "./method-generator-command copy";
 import { IExpression } from "../interpreter/abstract-interpreter";
+import { createWriteStream } from "fs";
 
 var fs = require("fs");
 var chalk = require("chalk");
@@ -68,7 +69,7 @@ export class FileGeneratorCommand implements ICommand {
     return program;
   }
 
-  action(entryList: any) {
+  async action(entryList: any) {
     console.log(
       chalk.greenBright(
         this.command.charAt(0).toUpperCase() +
@@ -78,7 +79,7 @@ export class FileGeneratorCommand implements ICommand {
     );
 
     if (entryList.length == 0) {
-      console.log("NO ARGS!!!");
+      console.log(chalk.red("NO ARGS!!!"));
       process.exit();
     }
 
@@ -99,17 +100,18 @@ export class FileGeneratorCommand implements ICommand {
           fileRef.file
           }`;
 
+        const destFileName = this.getFileName(
+          fileRef.resFile
+        );
         console.log(this.getFileName(this.destPath));
 
         const folderPath = `${process.cwd()}/${this.getFileName(this.destPath)}`;
-        const filePath = `${folderPath}/${this.getFileName(
-          fileRef.resFile
-        )}.${this.fileExt}`;
+        const filePath = `${folderPath}/${destFileName}.${this.fileExt}`;
 
 
 
         if (fs.existsSync(filePath)) {
-          console.log(chalk.red(`You already created this file! (${filePath})`));
+          console.log(chalk.magenta(`You already created this file! (${filePath})`));
 
           // Do something
           return;
@@ -117,24 +119,20 @@ export class FileGeneratorCommand implements ICommand {
           fs.mkdirSync(folderPath);
         }
 
-        fs.readFile(path, (err: any, data: any) => {
-          if (err) throw err;
+        let templateFile = fs.readFileSync(path, 'utf8');
 
-          fs.writeFile(
-            filePath,
-            new FileInterpreter().interpretFile(
-              data.toString(),
-              this.patternDataList
-            ),
-            function (err: any) {
-              if (err) {
-                return console.log(err);
-              }
+        templateFile = new FileInterpreter().interpretFile(
+          templateFile.toString(),
+          _.cloneDeep(this.patternDataList)
+        );
 
-              console.log(chalk.yellow(`The file was saved! (${filePath})`));
-            }
-          );
-        });
+        fs.writeFileSync(filePath, new FileInterpreter().interpretFile(
+          templateFile,
+          this.patternDataList
+        ), 'utf8');
+
+        console.log(chalk.greenBright(`I created a file for you (${filePath})`));
+
       }
     );
 

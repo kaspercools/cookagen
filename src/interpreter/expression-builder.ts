@@ -13,7 +13,8 @@ export class ExpressionInterpreter {
     interpret(expression: string): IExpression {
         // parse context and create expression
                
-        let expressions = (expression + '').replace(" ","").trim().split("|");
+        let expressions = (expression + '').replaceAll(" ","").trim().split("|");
+        console.log(expressions);
         
         return this.expressionFactory.createExpressionTree(expressions);
     }
