@@ -130,6 +130,13 @@ All **cookagen** expressions need to be enclosed by 2 identical open and closing
 The same expression syntax can be used throughout the **cookagen** config for all references to folderpaths or filenames.
 The example generator config in the [generator section](#generators) for example will create a file based on the given $ENTITY placeholder value. You could use the same syntax to determine folder locations or other filename references.
 
+The following command:
+```
+ cookagen domain entity:User
+```
+
+Would create a file named `User.cs` in the given target folder
+
 ### Functions
 The following list of function can be used in combiation with placeholder values an may be chained.
 
