@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import { FileGeneratorCommand } from "./commands/file-generator-command";
-
+import { MethodGeneratorCommand } from "./commands/method-generator-command copy";
+import * as _ from 'lodash';
+import { FileInterpreter } from "./interpreter/fileinterpreter";
 const fs = require("fs");
 const chalk = require("chalk");
 const clear = require("clear");
@@ -9,18 +11,24 @@ const figlet = require("figlet");
 const path = require("path");
 let program = require("commander");
 
-const parseList = [
-  { val: "entity", match: "$ENTITY" },
-  { val: "command", match: "$CMD" },
-  { val: "Guid", match: "$KEY" }
-];
+declare global { interface String { replaceAll(search: string, replacement: string): string; } }
+
+String.prototype.replaceAll = function (search: string, replacement: string): string {
+  var target = this;
+  return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 clear();
+
 console.log(
   chalk.blue(figlet.textSync("cookagen-cli", { horizontalLayout: "full" }))
 );
 program.version("0.0.1").description("A code generation tool");
 
-program.outputHelp();
+const cmdMap = new Map();
+const methodAlterations = new Map();
+
+// program.outputHelp();
 
 if (!fs.existsSync("./cookagen.json")) {
   console.log(
@@ -28,10 +36,22 @@ if (!fs.existsSync("./cookagen.json")) {
   );
   process.exit();
 }
-let rawdata = fs.readFileSync("cookagen.json");
-let cookagenConfig = JSON.parse(rawdata);
+//parse config
+const rawdata = fs.readFileSync("cookagen.json");
+const cookagenConfig = JSON.parse(rawdata);
+//create generators
 
 cookagenConfig.generators.forEach((generator: any) => {
+  //create lambda chain
+  const chainedLambdas: any[] = [];
+
+  if (generator.chain) {
+    generator.chain.forEach((chainedCmd: any) => {
+      const newLambda = (entryList: any) => cmdMap.get(chainedCmd).action(entryList);
+      chainedLambdas.push(newLambda);
+    });
+  }
+
   var cmd = new FileGeneratorCommand(
     generator.cmd,
     [],
@@ -42,8 +62,36 @@ cookagenConfig.generators.forEach((generator: any) => {
     generator.templates,
     generator.ext,
     "",
-    generator.parseList
+    _.cloneDeep(generator.parseList),
+    chainedLambdas,
+    generator.autoCreateFolders
   );
+
+
+  //create alterations
+  let alterations: MethodGeneratorCommand[] = [];
+  if (generator.alterations) {
+    alterations = generator.alterations.map((element: any) => {
+      return new MethodGeneratorCommand(
+        element.name,
+        [],
+        "create an object",
+        cookagenConfig.templateFolder,
+        element.targetFolder,
+        element.templateRoot,
+        element.templates,
+        element.entryPoint,
+        element.ext,
+        "",
+        _.cloneDeep(element.parseList),
+        [],
+        element.autoCreateFolders
+      );
+    })
+    cmd.setAlterations(alterations);
+  };
+
+  cmdMap.set(generator.cmd, cmd);
 
   program
     .command(`${generator.cmd} [entryList...]`)
@@ -51,60 +99,30 @@ cookagenConfig.generators.forEach((generator: any) => {
     .description("creates a class")
     .action((entryList: any) => {
       cmd.action(entryList);
+
     });
 });
 
-// var domainCmd = new FileGeneratorCommand(
-//   "domain",
-//   [],
-//   "create a domain object",
-//   "templates",
-//   "LegalRegister.Domain",
-//   "domain",
-//   [{ file: "entity.tpl", resFile: "{{$ENTITY}}", §: "{{$ENTITY}}" }],
-//   "cs",
-//   "",
-//   parseList
-// );
+program.command(`test <pattern> [entryList...]`)
+  .description('test your custom expression')
+  .action((pattern: string, entryList: string[]) => {
+    const patternList = [
+      {
+        "val": "command",
+        "match": "$CMD"
+      },
+      {
+        "val": "entity",
+        "match": "$ENTITY"
+      }
+    ];
 
-// var serviceCmd = new FileGeneratorCommand(
-//   "service",
-//   [],
-//   "create a domain object",
-//   "templates",
-//   "LegalRegister.Services",
-//   "services",
-//   [
-//     {
-//       file: "service.tpl",
-//       resFile: "{{$ENTITY}}Service",
-//       needle: "{{$ENTITY}}"
-//     },
-//     {
-//       file: "iservice.tpl",
-//       resFile: "I{{$ENTITY}}Service",
-//       needle: "{{$ENTITY}}"
-//     }
-//   ],
-//   "cs",
-//   "",
-//   parseList
-// );
-
-// program
-//   .command(`domain [entryList...]`)
-//   .alias("d")
-//   .description("creates a domain class")
-//   .action((entryList: any) => {
-//     domainCmd.action(entryList);
-//   });
-
-// program
-//   .command(`service [entryList...]`)
-//   .alias("s")
-//   .description("creates a service class")
-//   .action((entryList: any) => {
-//     serviceCmd.action(entryList);
-//   });
+    patternList.forEach(pattern => {
+      const entryForPattern = entryList.filter(e => e.startsWith(pattern.val));
+      if (entryForPattern.length > 0) {
+        pattern.val = entryForPattern[0].replace(`${pattern.val}:`, '');
+      }
+    });
+  });
 
 program.parse(process.argv);

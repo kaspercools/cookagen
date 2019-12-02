@@ -1,0 +1,1 @@
+IValidator<{{$ENTITY}}> Create{{$CMD}}{{$ENTITY}}Validator();

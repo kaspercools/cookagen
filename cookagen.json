@@ -1,5 +1,5 @@
 {
-    "templateFolder": "templates",
+    "templateFolder": ".templates",
     "generators": [
         {
             "cmd": "domain",
@@ -21,9 +21,34 @@
             ]
         },
         {
+            "cmd": "repo",
+            "alias": "r",
+            "targetFolder": "LegalRegister.Repositories/{{$ENTITY}}",
+            "autoCreateFolders": true,
+            "templateRoot": "repositories",
+            "templates": [
+                {
+                    "file": "repository.tpl",
+                    "resFile": "{{$ENTITY}}Repository"
+                },
+                {
+                    "file": "irepository.tpl",
+                    "resFile": "I{{$ENTITY}}Repository"
+                }
+            ],
+            "ext": "cs",
+            "parseList": [
+                {
+                    "val": "entity",
+                    "match": "$ENTITY"
+                }
+            ]
+        },
+        {
             "cmd": "service",
             "alias": "s",
-            "targetFolder": "LegalRegister.Services",
+            "targetFolder": "LegalRegister.Services/{{$ENTITY}}",
+            "autoCreateFolders": true,
             "templateRoot": "services",
             "templates": [
                 {
@@ -45,40 +70,21 @@
                     "val": "Guid",
                     "match": "$KEY"
                 }
-            ]
-        },
-        {
-            "cmd": "repo",
-            "alias": "r",
-            "targetFolder": "LegalRegister.Repositories",
-            "templateRoot": "repositories",
-            "templates": [
-                {
-                    "file": "repository.tpl",
-                    "resFile": "{{$ENTITY}}Repository"
-                },
-                {
-                    "file": "irepository.tpl",
-                    "resFile": "I{{$ENTITY}}Repository"
-                }
             ],
-            "ext": "cs",
-            "parseList": [
-                {
-                    "val": "entity",
-                    "match": "$ENTITY"
-                }
+            "chain": [
+                "repo"
             ]
         },
         {
             "cmd": "validation",
             "alias": "v",
-            "targetFolder": "LegalRegister.Validation",
+            "targetFolder": "LegalRegister.Validation/{{$ENTITY}}",
+            "autoCreateFolders": true,
             "templateRoot": "validation",
             "templates": [
                 {
                     "file": "validator.tpl",
-                    "resFile": "{{$ENTITY}}{{CMD}}Validator"
+                    "resFile": "{{$CMD}}{{$ENTITY}}Validator"
                 }
             ],
             "ext": "cs",
@@ -91,6 +97,61 @@
                     "val": "entity",
                     "match": "$ENTITY"
                 }
+            ],
+            "alterations": [
+                {
+                    "name":"validationFactory",
+                    "targetFolder": "LegalRegister.Validation/Factory",
+                    "autoCreateFolders": true,
+                    "templateRoot": "validation",
+                    "templates": [
+                        {"file":"ivalidationfactory.tpl", "target":"IValidatorFactory.cs"},
+                        {"file":"validationfactory.tpl", "target": "ValidatorFactory.cs"}
+                    ],
+                    "entryPoint": "$cookagen$",
+                    "ext": "cs",
+                    "parseList": [
+                        {
+                            "val": "command",
+                            "match": "$CMD"
+                        },
+                        {
+                            "val": "entity",
+                            "match": "$ENTITY"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "cmd": "command",
+            "alias": "c",
+            "targetFolder": "LegalRegister.Commands/{{$ENTITY}}",
+            "autoCreateFolders": true,
+            "templateRoot": "commands",
+            "templates": [
+                {
+                    "file": "command.tpl",
+                    "resFile": "{{$CMD}}{{$ENTITY}}Command"
+                },
+                {
+                    "file": "commandhandler.tpl",
+                    "resFile": "{{$CMD}}{{$ENTITY}}CommandHandler"
+                }
+            ],
+            "ext": "cs",
+            "parseList": [
+                {
+                    "val": "command",
+                    "match": "$CMD"
+                },
+                {
+                    "val": "entity",
+                    "match": "$ENTITY"
+                }
+            ],
+            "chain": [
+                "validation"
             ]
         }
     ]

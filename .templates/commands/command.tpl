@@ -5,10 +5,10 @@
 
     namespace LegalRegister.Commands
     {
-        public class {{CMD}}{{ENTITY}}Command : ILegalRegisterCommand
+        public class {{$CMD}}{{$ENTITY}}Command : ILegalRegisterCommand
         {
             public IValidator Validator { get; private set; }
-            public {{CMD}}{{ENTITY}}Command(IValidator validator)
+            public {{$CMD}}{{$ENTITY}}Command(IValidator validator)
             {
                 this.Validator = validator;
                 this.Id = Guid.NewGuid();
@@ -18,7 +18,7 @@
 
             public ValidationResult Validate()
             {
-                return Validator?.Validate(new {{ENTITY}}()
+                return Validator?.Validate(new {{$ENTITY}}()
                 {
                     Id = Id
                 });

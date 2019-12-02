@@ -5,13 +5,19 @@ import DataExpression from "../interpreter/temrinal-expression";
 import { PascalCaseExpression } from "../interpreter/pascalcase-expression";
 import { FileInterpreter } from "../interpreter/fileinterpreter";
 import { PatternData } from "../pattern-data";
+import * as _ from "lodash";
+import { MethodGeneratorCommand } from "./method-generator-command copy";
+import { IExpression } from "../interpreter/abstract-interpreter";
+import { createWriteStream } from "fs";
+
 var fs = require("fs");
 var chalk = require("chalk");
 
 export class FileGeneratorCommand implements ICommand {
+  alterations: MethodGeneratorCommand[] = [];
   destPath: string;
   subType: string;
-  subTypeFiles: { file: string; resFile: string; }[];
+  subTypeFiles: { file: string; resFile: string }[];
   fileExt: string;
   patternDataList: PatternData[];
   description: string;
@@ -19,6 +25,8 @@ export class FileGeneratorCommand implements ICommand {
   options: any[];
   templatePath: string;
   suffix: string;
+  methodChainList: any;
+  autoCreateFolders: boolean;
 
   constructor(
     command: string,
@@ -27,10 +35,12 @@ export class FileGeneratorCommand implements ICommand {
     templatePath: string,
     destPath: string,
     subType: string,
-    subTypeFiles: { file: string; resFile: string; }[],
+    subTypeFiles: { file: string; resFile: string }[],
     fileExt: string,
     suffix: string,
-    patterns: PatternData[]
+    patterns: PatternData[],
+    methodChainList: any[],
+    autoCreateFolders = false
   ) {
     this.templatePath = templatePath;
     this.command = command;
@@ -41,7 +51,10 @@ export class FileGeneratorCommand implements ICommand {
     this.subTypeFiles = subTypeFiles;
     this.suffix = suffix;
     this.fileExt = fileExt;
-    this.patternDataList = patterns;
+    this.patternDataList = _.clone(patterns);
+    this.methodChainList = methodChainList;
+    this.autoCreateFolders =
+      typeof autoCreateFolders === undefined ? false : autoCreateFolders;
   }
 
   build(program: any): any {
@@ -55,7 +68,7 @@ export class FileGeneratorCommand implements ICommand {
     return program;
   }
 
-  action(entryList: any) {
+  async action(entryList: any) {
     console.log(
       chalk.greenBright(
         this.command.charAt(0).toUpperCase() +
@@ -63,10 +76,12 @@ export class FileGeneratorCommand implements ICommand {
           " command called"
       )
     );
+
     if (entryList.length == 0) {
-      console.log("NO ARGS!!!");
+      console.log(chalk.red("NO ARGS!!!"));
       process.exit();
     }
+
     const entity = entryList[0];
 
     this.patternDataList.forEach((pattern, index) => {
@@ -76,58 +91,70 @@ export class FileGeneratorCommand implements ICommand {
     });
 
     this.subTypeFiles.forEach(
-      (
-        fileRef: { file: string; resFile: string; },
-        index
-      ) => {
+      (fileRef: { file: string; resFile: string }, index) => {
         const path = `${process.cwd()}/${this.templatePath}/${this.subType}/${
           fileRef.file
         }`;
 
-        const filePath = `${process.cwd()}/${this.destPath}/${this.getFileName(
-          fileRef,
-          this.patternDataList
-        )}.${this.fileExt}`;
+        const destFileName = this.getFileName(fileRef.resFile);
+        console.log(this.getFileName(this.destPath));
+
+        const folderPath = `${process.cwd()}/${this.getFileName(
+          this.destPath
+        )}`;
+        const filePath = `${folderPath}/${destFileName}.${this.fileExt}`;
 
         if (fs.existsSync(filePath)) {
-          console.log(chalk.red("Already created!"));
+          console.log(
+            chalk.magenta(`You already created this file! (${filePath})`)
+          );
 
           // Do something
-          process.exit();
+          return;
+        } else if (!fs.existsSync(folderPath)) {
+          fs.mkdirSync(folderPath);
         }
 
-        fs.readFile(path, (err: any, data: any) => {
-          if (err) throw err;
+        let templateFile = fs.readFileSync(path, "utf8");
 
-          fs.writeFile(
-            filePath,
-            new FileInterpreter().interpretFile(
-              data.toString(),
-              this.patternDataList
-            ),
-            function(err: any) {
-              if (err) {
-                return console.log(err);
-              }
-              console.log(chalk.yellow(`The file was saved! (${filePath})`));
-            }
-          );
-        });
+        templateFile = new FileInterpreter().interpretFile(
+          templateFile.toString(),
+          _.cloneDeep(this.patternDataList)
+        );
+
+        fs.writeFileSync(
+          filePath,
+          new FileInterpreter().interpretFile(
+            templateFile,
+            this.patternDataList
+          ),
+          "utf8"
+        );
+
+        console.log(
+          chalk.greenBright(`I created a file for you (${filePath})`)
+        );
       }
     );
-  }
-  getFileName(
-    fileRef: { file: string; resFile: string;},
-    patternDataList: PatternData[]
-  ) {
-    let result = fileRef.resFile;
-    const expInterpreter = new ExpressionInterpreter();
-    this.patternDataList.forEach((currentPattern, index) => {
-      result = expInterpreter
-        .interpret(`{{${currentPattern.match}}}`)
-        .interpret(result, currentPattern.val);
+
+    this.methodChainList.forEach((methodInChain: any) => {
+      methodInChain(entryList);
     });
 
+    this.alterations.forEach((alteration: MethodGeneratorCommand) => {
+      alteration.action(entryList);
+    });
+  }
+  getFileName(filePath: string) {
+    const result = new FileInterpreter().interpret(
+      filePath,
+      this.patternDataList
+    );
+
     return result;
+  }
+
+  setAlterations(alterations: MethodGeneratorCommand[]) {
+    this.alterations = alterations;
   }
 }
