@@ -123,62 +123,6 @@ program.command(`test <pattern> [entryList...]`)
         pattern.val = entryForPattern[0].replace(`${pattern.val}:`, '');
       }
     });
-    console.log(patternList);
-
-    console.log(new FileInterpreter().interpret(pattern, patternList));
   });
-
-// var domainCmd = new FileGeneratorCommand(
-//   "domain",
-//   [],
-//   "create a domain object",
-//   "templates",
-//   "LegalRegister.Domain",
-//   "domain",
-//   [{ file: "entity.tpl", resFile: "{{$ENTITY}}", §: "{{$ENTITY}}" }],
-//   "cs",
-//   "",
-//   parseList
-// );
-
-// var serviceCmd = new FileGeneratorCommand(
-//   "service",
-//   [],
-//   "create a domain object",
-//   "templates",
-//   "LegalRegister.Services",
-//   "services",
-//   [
-//     {
-//       file: "service.tpl",
-//       resFile: "{{$ENTITY}}Service",
-//       needle: "{{$ENTITY}}"
-//     },
-//     {
-//       file: "iservice.tpl",
-//       resFile: "I{{$ENTITY}}Service",
-//       needle: "{{$ENTITY}}"
-//     }
-//   ],
-//   "cs",
-//   "",
-//   parseList
-// );
-
-// program
-//   .command(`domain [entryList...]`)
-//   .alias("d")
-//   .description("creates a domain class")
-//   .action((entryList: any) => {
-//     domainCmd.action(entryList);
-//   });
-
-// program
-//   .command(`service [entryList...]`)
-//   .alias("s")
-//   .description("creates a service class")
-//   .action((entryList: any) => {
-//     serviceCmd.action(entryList);
-//   });
 
 program.parse(process.argv);
