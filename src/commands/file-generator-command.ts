@@ -124,7 +124,7 @@ export class FileGeneratorCommand implements ICommand {
     const expInterpreter = new ExpressionInterpreter();
     this.patternDataList.forEach((currentPattern, index) => {
       result = expInterpreter
-        .interpret(currentPattern.match)
+        .interpret(`{{${currentPattern.match}}}`)
         .interpret(result, currentPattern.val);
     });
 
