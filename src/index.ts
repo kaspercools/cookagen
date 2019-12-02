@@ -122,7 +122,6 @@ program.command(`test <pattern> [entryList...]`)
       }
     });
 
-
     console.log(new FileInterpreter().interpret(pattern, patternList));
   });
 

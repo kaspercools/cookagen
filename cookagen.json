@@ -39,7 +39,11 @@
             "ext": "cs",
             "parseList": [
                 {
-                    "val": "entity",
+                    "val": "cmd",
+                    "match": "$COMMAND"
+                },
+                {
+                    "val": "ent",
                     "match": "$ENTITY"
                 }
             ]
