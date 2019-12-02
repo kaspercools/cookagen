@@ -119,8 +119,8 @@ Alterations can be used to add extra functionality to existing files.
 
 //TODO
 
-## Template Expressions
-Within a template you can refer to a placeholder ([see ParseList](#parselist)) as follows:
+## Expressions
+Within a template or a filename within the **cookagen** config you can refer to a placeholder ([see ParseList](#parselist)) as follows:
 ```
 {{$ENTITY}}
 ```
