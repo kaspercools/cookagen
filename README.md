@@ -54,6 +54,22 @@ To add a generator you need to define at least the following key attributes:
 | alias        | The alias you want to create for this generator                                              |
 | targetFolder | The target folder where the generated files need to be saved                                 |
 | templateRoot | The root folder for this particular generator (a folder within given templateFolder)         |
-| templates    | { "file":"entity.tpl", "resFile": "{{$ENTITY}}" }                                            |
+| templates    | { "file":"entity.tpl", "resFile": "{{$ENTITY}}" }  [more info in the template section](#templates)                                          |
 | ext          | The file suffix (extension) that needs to be used ( you can use any file extension you like) |
-| parseList    | [{"val":"entity", "match":"$ENTITY"}]                                                        |
+| parseList    | [{"val":"entity", "match":"$ENTITY"}] [more info in the ParseList section](#parselist)                                                        |
+[more info in the template section](#templates)
+### Templates
+
+| Property | Value                                                               |
+|----------|---------------------------------------------------------------------|
+| file     | The name of the template file (relative to the tempalteRoot folder) |
+| resFile  | Name of the resulting file                                          |
+
+### ParseList
+
+The parselist itself lists all possible input variables (command line arguments) that can be processed. 
+
+| Property | Value                                                               |
+|----------|---------------------------------------------------------------------|
+| val     | The value that will be injected in the matching placeholder |
+| match  | A placeholder referenced in your tpl files                                          |
