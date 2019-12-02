@@ -82,7 +82,8 @@ The following definition: `"chain":["repo"]` will execute the `repo` generator (
 
 ### alterations
 
-//TODO
+Alterations can be used to add extra functionality to existing files. 
+
 ```
 "alterations": [
     {
