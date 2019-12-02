@@ -85,8 +85,12 @@ export class FileGeneratorCommand implements ICommand {
     const entity = entryList[0];
 
     this.patternDataList.forEach((pattern, index) => {
-      if (entryList.length > index) {
-        pattern.val = entryList[index];
+      // if (entryList.length > index) {
+      //   pattern.val = entryList[index];
+      // }
+      const entryForPattern = entryList.filter((e:any) => e.startsWith(pattern.val));
+      if (entryForPattern.length > 0) {
+        pattern.val = entryForPattern[0].replace(`${pattern.val}:`, '');
       }
     });
 

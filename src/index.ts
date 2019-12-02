@@ -123,6 +123,8 @@ program.command(`test <pattern> [entryList...]`)
         pattern.val = entryForPattern[0].replace(`${pattern.val}:`, '');
       }
     });
+
+    console.log(new FileInterpreter().interpret(pattern, patternList));
   });
 
 program.parse(process.argv);

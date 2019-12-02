@@ -6,14 +6,14 @@ import { PascalCaseExpression } from "../interpreter/pascalcase-expression";
 import { FileInterpreter } from "../interpreter/fileinterpreter";
 import { PatternData } from "../pattern-data";
 var fs = require("fs");
-import * as _ from 'lodash';
+import * as _ from "lodash";
 import { createWriteStream } from "fs";
 var chalk = require("chalk");
 
 export class MethodGeneratorCommand implements ICommand {
   destPath: string;
   subType: string;
-  templates: { file: string, target: string }[];
+  templates: { file: string; target: string }[];
   fileExt: string;
   patternDataList: PatternData[];
   description: string;
@@ -32,7 +32,7 @@ export class MethodGeneratorCommand implements ICommand {
     templatePath: string,
     destPath: string,
     subType: string,
-    templates: { file: string, target: string }[],
+    templates: { file: string; target: string }[],
     entryPoint: string,
     fileExt: string,
     suffix: string,
@@ -49,10 +49,11 @@ export class MethodGeneratorCommand implements ICommand {
     this.templates = templates;
     this.suffix = suffix;
     this.fileExt = fileExt;
-    this.patternDataList = _.clone(patterns);//([]as any).push(patterns);
+    this.patternDataList = _.clone(patterns); //([]as any).push(patterns);
     this.methodChainList = methodChainList;
     this.entryPoint = `/*${entryPoint}*/`;
-    this.autoCreateFolders = (typeof (autoCreateFolders) === undefined) ? false : autoCreateFolders;
+    this.autoCreateFolders =
+      typeof autoCreateFolders === undefined ? false : autoCreateFolders;
   }
 
   build(program: any): any {
@@ -63,8 +64,8 @@ export class MethodGeneratorCommand implements ICommand {
     console.log(
       chalk.greenBright(
         this.command.charAt(0).toUpperCase() +
-        this.command.substring(1) +
-        " command called"
+          this.command.substring(1) +
+          " command called"
       )
     );
 
@@ -75,37 +76,44 @@ export class MethodGeneratorCommand implements ICommand {
 
     const entity = entryList[0];
 
-
     this.templates.forEach(
-      (
-        template: { file: string, target: string },
-        index
-      ) => {
+      (template: { file: string; target: string }, index) => {
         this.patternDataList.forEach((pattern, index) => {
-          if (entryList.length > index) {
-            pattern.val = entryList[index];
+          // if (entryList.length > index) {
+          //   pattern.val = entryList[index];
+          // }
+          const entryForPattern = entryList.filter((e: any) =>
+            e.startsWith(pattern.val)
+          );
+          if (entryForPattern.length > 0) {
+            pattern.val = entryForPattern[0].replace(`${pattern.val}:`, "");
           }
         });
+
         console.log(chalk.yellow("New Template run"));
 
         const path = `${process.cwd()}/${this.templatePath}/${this.subType}/${
           template.file
-          }`;
+        }`;
 
-        const folderPath = `${process.cwd()}/${this.getFileName(this.destPath)}`;
-        const filePath = `${folderPath}/${this.getFileName(
-          template.target
+        const folderPath = `${process.cwd()}/${this.getFileName(
+          this.destPath
         )}`;
+        const filePath = `${folderPath}/${this.getFileName(template.target)}`;
 
         if (!fs.existsSync(folderPath)) {
-          console.log(chalk.red(`Cannot access ${folderPath}... skipping alteration ${this.command}`));
+          console.log(
+            chalk.red(
+              `Cannot access ${folderPath}... skipping alteration ${this.command}`
+            )
+          );
 
           return;
         }
 
         //read Template
-        let methodString = fs.readFileSync(path, 'utf8');
-        var classString = fs.readFileSync(filePath, 'utf8');
+        let methodString = fs.readFileSync(path, "utf8");
+        var classString = fs.readFileSync(filePath, "utf8");
         //process classString;
 
         methodString = new FileInterpreter().interpretFile(
@@ -114,21 +122,24 @@ export class MethodGeneratorCommand implements ICommand {
         );
 
         if (!classString.includes(methodString)) {
-          classString = classString.replace(`${this.entryPoint}`, `${methodString}\n\t\t${this.entryPoint}`);
-          fs.writeFileSync(filePath, classString, 'utf8');
-          console.log(chalk.greenBright(`I altered ${template.target} (${filePath})`));
+          classString = classString.replace(
+            `${this.entryPoint}`,
+            `${methodString}\n\t\t${this.entryPoint}`
+          );
+          fs.writeFileSync(filePath, classString, "utf8");
+          console.log(
+            chalk.greenBright(`I altered ${template.target} (${filePath})`)
+          );
         }
       }
     );
-
   }
-  getFileName(
-    filePath: string
-  ) {
-
-    const result = new FileInterpreter().interpret(filePath, this.patternDataList);
+  getFileName(filePath: string) {
+    const result = new FileInterpreter().interpret(
+      filePath,
+      this.patternDataList
+    );
 
     return result;
   }
-
 }

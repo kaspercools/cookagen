@@ -4,7 +4,7 @@
         {
             "cmd": "domain",
             "alias": "d",
-            "targetFolder": "LegalRegister.Domain",
+            "targetFolder": "data",
             "templateRoot": "domain",
             "templates": [
                 {
@@ -15,7 +15,11 @@
             "ext": "cs",
             "parseList": [
                 {
-                    "val": "entity",
+                    "val": "cmd",
+                    "match": "$COMMAND"
+                },
+                {
+                    "val": "ent",
                     "match": "$ENTITY"
                 }
             ]
