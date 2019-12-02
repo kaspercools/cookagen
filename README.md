@@ -117,3 +117,21 @@ Within a template you can refer to a placeholder ((see ParseList)[#parselist]) a
 ```
 
 All **cookagen** expressions need to be enclosed by 2 identical open and closing brackets on both sides. 
+
+### Functions
+The following list of function can be used in combiation with placeholder values an may be chained.
+
+| Name       | Description                                           |
+|------------|-------------------------------------------------------|
+| lowerCase  | Converts a given string to lower case                 |
+| pascalCase | Capitalizes the first character of a given string     |
+| camelCase  | Puts the first letter of a given string in lower case |
+| plural     | Pluralizes a given string                             |
+
+Example usage:
+```
+// single function
+{{$ENTITY | camelCase}}
+// multiple function chaining
+{{$ENTITY | camelCase | plural}}
+```
