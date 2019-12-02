@@ -120,12 +120,15 @@ Alterations can be used to add extra functionality to existing files.
 //TODO
 
 ## Expressions
-Within a template or a filename within the **cookagen** config you can refer to a placeholder ([see ParseList](#parselist)) as follows:
+Within a template file you can refer to a placeholder ([see ParseList](#parselist)) as follows:
 ```
 {{$ENTITY}}
 ```
 
 All **cookagen** expressions need to be enclosed by 2 identical open and closing brackets on both sides. 
+
+The same expression syntax can be used throughout the **cookagen** config for all references to folderpaths or filenames.
+The example generator config in the [generator section](#generators) for example will create a file based on the given $ENTITY placeholder value. You could use the same syntax to determine folder locations or other filename references.
 
 ### Functions
 The following list of function can be used in combiation with placeholder values an may be chained.
