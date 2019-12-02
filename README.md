@@ -81,7 +81,34 @@ When you want to chain multiple commands you can add the "chain" property to a g
 The following definition: `"chain":["repo"]` will execute the `repo` generator (defined by the cmd property) once the called command has finished and right before the alterations are processed
 
 ### alterations
+
 //TODO
+```
+"alterations": [
+    {
+        "name":"validationFactory",
+        "targetFolder": "LegalRegister.Validation/Factory",
+        "autoCreateFolders": true,
+        "templateRoot": "validation",
+        "templates": [
+            {"file":"ivalidationfactory.tpl", "target":"IValidatorFactory.cs"},
+            {"file":"validationfactory.tpl", "target": "ValidatorFactory.cs"}
+        ],
+        "entryPoint": "$cookagen$",
+        "ext": "cs",
+        "parseList": [
+            {
+                "val": "command",
+                "match": "$CMD"
+            },
+            {
+                "val": "entity",
+                "match": "$ENTITY"
+            }
+        ]
+    }
+]
+```
 ## Template Expressions
 Within a template you can refer to a placeholder ((see ParseList)[#parselist]) as follows:
 ```
