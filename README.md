@@ -8,6 +8,12 @@ run the following commands to get started on your local environment:
     // Run following command to install cookagen globally
     npm install -g 
 ```
+## Example usage
+
+The following command executes a generator named domain and passes the value `User` to the entity placeholder [more details can be found in the ParseList section](#parselist)
+```
+    cookagen domain entity:User 
+```
 
 If used globally you can run the command from any directory in any type of project. You simply need to provide a `cookagen.json` file which contains the environment settings.
 
