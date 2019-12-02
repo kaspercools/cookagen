@@ -25,6 +25,7 @@ The Template folder parameter is a relative path definition in respect to the co
 
 ## Generators
 To add a generator you need to define at least the following key attributes:
+
 ```
 {
     "cmd": "domain",
@@ -46,3 +47,13 @@ To add a generator you need to define at least the following key attributes:
     ]
 }
 ```
+
+| Property     | Value                                                                                        |
+|--------------|----------------------------------------------------------------------------------------------|
+| cmd          | The command you wish to use to call this generator                                           |
+| alias        | The alias you want to create for this generator                                              |
+| targetFolder | The target folder where the generated files need to be saved                                 |
+| templateRoot | The root folder for this particular generator (a folder within given templateFolder)         |
+| templates    | { "file":"entity.tpl", "resFile": "{{$ENTITY}}" }                                            |
+| ext          | The file suffix (extension) that needs to be used ( you can use any file extension you like) |
+| parseList    | [{"val":"entity", "match":"$ENTITY"}]                                                        |
