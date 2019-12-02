@@ -57,7 +57,6 @@ To add a generator you need to define at least the following key attributes:
 | templates    | { "file":"entity.tpl", "resFile": "{{$ENTITY}}" }  [more info in the template section](#templates)                                          |
 | ext          | The file suffix (extension) that needs to be used ( you can use any file extension you like) |
 | parseList    | [{"val":"entity", "match":"$ENTITY"}] [more info in the ParseList section](#parselist)                                                        |
-[more info in the template section](#templates)
 ### Templates
 
 | Property | Value                                                               |
