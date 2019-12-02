@@ -11,7 +11,7 @@ run the following commands to get started on your local environment:
 
 If used globally you can run the command from any directory in any type of project. You simply need to provide a `cookagen.json` file which contains the environment settings.
 
-## COOKAGEN Config
+# COOKAGEN Config
 The **cookagen** config needs to contain atleast the following keys:
 ```
 {
@@ -57,6 +57,7 @@ To add a generator you need to define at least the following key attributes:
 | templates    | { "file":"entity.tpl", "resFile": "{{$ENTITY}}" }  [more info in the template section](#templates)                                          |
 | ext          | The file suffix (extension) that needs to be used ( you can use any file extension you like) |
 | parseList    | [{"val":"entity", "match":"$ENTITY"}] [more info in the ParseList section](#parselist)                                                        |
+
 ### Templates
 
 | Property | Value                                                               |
@@ -72,3 +73,19 @@ The parselist itself lists all possible input variables (command line arguments)
 |----------|---------------------------------------------------------------------|
 | val     | The value that will be injected in the matching placeholder |
 | match  | A placeholder referenced in your tpl files                                          |
+
+### Optional properties
+
+#### chain
+When you want to chain multiple commands you can add the "chain" property to a generator. 
+The following definition: `"chain":["repo"]` will execute the `repo` generator (defined by the cmd property) once the called command has finished and right before the alterations are processed
+
+### alterations
+//TODO
+## Template Expressions
+Within a template you can refer to a placeholder ((see ParseList)[#parselist]) as follows:
+```
+{{$ENTITY}}
+```
+
+All **cookagen** expressions need to be enclosed by 2 identical open and closing brackets on both sides. 
