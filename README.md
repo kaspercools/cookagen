@@ -12,13 +12,13 @@ run the following commands to get started on your local environment:
 
 The following command executes a generator named domain and passes the value `User` to the entity placeholder [more details can be found in the ParseList section](#parselist)
 ```
-    cookagen domain entity:User 
+    cookagen domain entity:user 
 ```
 
 If used globally you can run the command from any directory in any type of project. You simply need to provide a `cookagen.json` file which contains the environment settings.
 
 # COOKAGEN Config
-The **cookagen** config needs to contain atleast the following keys:
+The **cookagen** config needs to contain at least the following keys:
 ```
 {
     "templateFolder": ".templates"
