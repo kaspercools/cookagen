@@ -1,3 +1,18 @@
+## Table of contents
+- [COOKAGEN - A quick and dirty code generator](#cookagen---a-quick-and-dirty-code-generator)
+  - [First time usage](#first-time-usage)
+  - [Example usage](#example-usage)
+- [COOKAGEN Config](#cookagen-config)
+  - [Template Folder](#template-folder)
+  - [Generators](#generators)
+    - [Templates](#templates)
+    - [ParseList](#parselist)
+    - [Optional properties](#optional-properties)
+      - [chain](#chain)
+    - [alterations](#alterations)
+  - [Expressions](#expressions)
+    - [Functions](#functions)
+
 # COOKAGEN - A quick and dirty code generator
 
 ## First time usage
