@@ -1,14 +1,8 @@
 import { ICommand } from "./icommand";
-import { ExpressionInterpreter } from "../interpreter/expression-builder";
-import { CamelCaseExpression } from "../interpreter/camelcase-expression";
-import DataExpression from "../interpreter/temrinal-expression";
-import { PascalCaseExpression } from "../interpreter/pascalcase-expression";
 import { FileInterpreter } from "../interpreter/fileinterpreter";
 import { PatternData } from "../pattern-data";
 import * as _ from "lodash";
 import { MethodGeneratorCommand } from "./method-generator-command copy";
-import { IExpression } from "../interpreter/abstract-interpreter";
-import { createWriteStream } from "fs";
 
 var fs = require("fs");
 var chalk = require("chalk");
@@ -72,8 +66,8 @@ export class FileGeneratorCommand implements ICommand {
     console.log(
       chalk.greenBright(
         this.command.charAt(0).toUpperCase() +
-          this.command.substring(1) +
-          " command called"
+        this.command.substring(1) +
+        " command called"
       )
     );
 
@@ -88,7 +82,7 @@ export class FileGeneratorCommand implements ICommand {
       // if (entryList.length > index) {
       //   pattern.val = entryList[index];
       // }
-      const entryForPattern = entryList.filter((e:any) => e.startsWith(pattern.val));
+      const entryForPattern = entryList.filter((e: any) => e.startsWith(pattern.val));
       if (entryForPattern.length > 0) {
         pattern.val = entryForPattern[0].replace(`${pattern.val}:`, '');
       }
@@ -98,7 +92,7 @@ export class FileGeneratorCommand implements ICommand {
       (fileRef: { file: string; resFile: string }, index) => {
         const path = `${process.cwd()}/${this.templatePath}/${this.subType}/${
           fileRef.file
-        }`;
+          }`;
 
         const destFileName = this.getFileName(fileRef.resFile);
         console.log(this.getFileName(this.destPath));

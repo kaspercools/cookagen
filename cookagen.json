@@ -9,17 +9,13 @@
             "templates": [
                 {
                     "file": "entity.tpl",
-                    "resFile": "{{$ENTITY}}"
+                    "resFile": "{{$ENTITY|hyphenise}}"
                 }
             ],
             "ext": "cs",
             "parseList": [
                 {
-                    "val": "cmd",
-                    "match": "$COMMAND"
-                },
-                {
-                    "val": "ent",
+                    "val": "entity",
                     "match": "$ENTITY"
                 }
             ]
@@ -104,13 +100,19 @@
             ],
             "alterations": [
                 {
-                    "name":"validationFactory",
+                    "name": "validationFactory",
                     "targetFolder": "LegalRegister.Validation/Factory",
                     "autoCreateFolders": true,
                     "templateRoot": "validation",
                     "templates": [
-                        {"file":"ivalidationfactory.tpl", "target":"IValidatorFactory.cs"},
-                        {"file":"validationfactory.tpl", "target": "ValidatorFactory.cs"}
+                        {
+                            "file": "ivalidationfactory.tpl",
+                            "target": "IValidatorFactory.cs"
+                        },
+                        {
+                            "file": "validationfactory.tpl",
+                            "target": "ValidatorFactory.cs"
+                        }
                     ],
                     "entryPoint": "$cookagen$",
                     "ext": "cs",

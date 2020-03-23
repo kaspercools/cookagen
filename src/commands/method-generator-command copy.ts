@@ -1,13 +1,8 @@
 import { ICommand } from "./icommand";
-import { ExpressionInterpreter } from "../interpreter/expression-builder";
-import { CamelCaseExpression } from "../interpreter/camelcase-expression";
-import DataExpression from "../interpreter/temrinal-expression";
-import { PascalCaseExpression } from "../interpreter/pascalcase-expression";
 import { FileInterpreter } from "../interpreter/fileinterpreter";
 import { PatternData } from "../pattern-data";
 var fs = require("fs");
 import * as _ from "lodash";
-import { createWriteStream } from "fs";
 var chalk = require("chalk");
 
 export class MethodGeneratorCommand implements ICommand {
@@ -64,8 +59,8 @@ export class MethodGeneratorCommand implements ICommand {
     console.log(
       chalk.greenBright(
         this.command.charAt(0).toUpperCase() +
-          this.command.substring(1) +
-          " command called"
+        this.command.substring(1) +
+        " command called"
       )
     );
 
@@ -94,7 +89,7 @@ export class MethodGeneratorCommand implements ICommand {
 
         const path = `${process.cwd()}/${this.templatePath}/${this.subType}/${
           template.file
-        }`;
+          }`;
 
         const folderPath = `${process.cwd()}/${this.getFileName(
           this.destPath
