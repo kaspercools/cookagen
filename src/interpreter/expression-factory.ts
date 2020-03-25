@@ -6,6 +6,7 @@ import { NoExpression } from "./no-expression";
 import { PluralExpression } from "./plural-expression";
 import { PascalCaseExpression } from "./pascalcase-expression";
 import { HypheniseExpression } from './hyphenise-expression';
+import { UpperCaseExpression } from "./uppercase-expression";
 
 export class ExpressionFactory {
   createExpressionTree(expressions: string[]): IExpression {
@@ -25,6 +26,9 @@ export class ExpressionFactory {
   public createExpression(data: IExpression, operation = ""): IExpression {
     let expression = new NoExpression();
     switch (operation) {
+      case "upperCase":
+        expression = new UpperCaseExpression(data);
+        break;
       case "lowerCase":
         expression = new LowerCaseExpression(data);
         break;
@@ -39,7 +43,6 @@ export class ExpressionFactory {
         break;
       case "hyphenise":
         console.log("hyphenise");
-
         expression = new HypheniseExpression(data);
         break;
     }
