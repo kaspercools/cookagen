@@ -3,16 +3,17 @@ import { FileInterpreter } from "../interpreter/fileinterpreter";
 import { PatternData } from "../pattern-data";
 var fs = require("fs");
 import * as _ from "lodash";
+import { basename } from "path";
+import { GeneratorCommand } from "./generator-command";
 var chalk = require("chalk");
 
-export class MethodGeneratorCommand implements ICommand {
+export class MethodGeneratorCommand extends GeneratorCommand implements ICommand {
   destPath: string;
   subType: string;
   templates: { file: string; target: string }[];
   fileExt: string;
-  patternDataList: PatternData[];
   description: string;
-  command: string;
+ 
   options: any[];
   templatePath: string;
   suffix: string;
@@ -35,8 +36,8 @@ export class MethodGeneratorCommand implements ICommand {
     methodChainList: any[],
     autoCreateFolders = false
   ) {
+    super(command,_.clone(patterns));
     this.templatePath = templatePath;
-    this.command = command;
     this.description = description;
     this.options = options;
     this.destPath = destPath;
@@ -44,7 +45,7 @@ export class MethodGeneratorCommand implements ICommand {
     this.templates = templates;
     this.suffix = suffix;
     this.fileExt = fileExt;
-    this.patternDataList = _.clone(patterns); //([]as any).push(patterns);
+
     this.methodChainList = methodChainList;
     this.entryPoint = `/*${entryPoint}*/`;
     this.autoCreateFolders =
@@ -55,28 +56,12 @@ export class MethodGeneratorCommand implements ICommand {
     return program;
   }
 
-  action(entryList: any) {
-    console.log(
-      chalk.greenBright(
-        this.command.charAt(0).toUpperCase() +
-        this.command.substring(1) +
-        " command called"
-      )
-    );
-
-    if (entryList.length == 0) {
-      console.log(chalk.red("NO ARGS... TRY AGAIN!"));
-      process.exit();
-    }
-
-    const entity = entryList[0];
-
+  async action(entryList: any) {
+    super.action(entryList);
+    
     this.templates.forEach(
       (template: { file: string; target: string }, index) => {
         this.patternDataList.forEach((pattern, index) => {
-          // if (entryList.length > index) {
-          //   pattern.val = entryList[index];
-          // }
           const entryForPattern = entryList.filter((e: any) =>
             e.startsWith(pattern.val)
           );
@@ -106,10 +91,8 @@ export class MethodGeneratorCommand implements ICommand {
           return;
         }
 
-        //read Template
         let methodString = fs.readFileSync(path, "utf8");
         var classString = fs.readFileSync(filePath, "utf8");
-        //process classString;
 
         methodString = new FileInterpreter().interpretFile(
           methodString.toString(),
@@ -129,12 +112,5 @@ export class MethodGeneratorCommand implements ICommand {
       }
     );
   }
-  getFileName(filePath: string) {
-    const result = new FileInterpreter().interpret(
-      filePath,
-      this.patternDataList
-    );
-
-    return result;
-  }
+  
 }

@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 
 import { FileGeneratorCommand } from "./commands/file-generator-command";
-import { MethodGeneratorCommand } from "./commands/method-generator-command copy";
+import { MethodGeneratorCommand } from "./commands/method-generator-command";
 import * as _ from 'lodash';
 import { FileInterpreter } from "./interpreter/fileinterpreter";
 const fs = require("fs");
 const chalk = require("chalk");
 const clear = require("clear");
 const figlet = require("figlet");
-const path = require("path");
 let program = require("commander");
 
 declare global { interface String { replaceAll(search: string, replacement: string): string; } }

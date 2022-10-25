@@ -38,4 +38,3 @@ export class FileInterpreter {
     }
   }
 }
-//OLD AS OF 30/11 [\{]{2}\$\w* *[\|]* *\w+[\}]{2}|[\{]{2}\$\w*[\|]*\w+[\}]{2}

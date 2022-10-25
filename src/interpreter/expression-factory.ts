@@ -10,8 +10,6 @@ import { UpperCaseExpression } from "./uppercase-expression";
 
 export class ExpressionFactory {
   createExpressionTree(expressions: string[]): IExpression {
-    const expression = new NoExpression();
-
     if (expressions.length > 1) {
       let lastExpression = expressions.pop();
       return this.createExpression(

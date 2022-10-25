@@ -2,20 +2,19 @@ import { ICommand } from "./icommand";
 import { FileInterpreter } from "../interpreter/fileinterpreter";
 import { PatternData } from "../pattern-data";
 import * as _ from "lodash";
-import { MethodGeneratorCommand } from "./method-generator-command copy";
+import { MethodGeneratorCommand } from "./method-generator-command";
+import { GeneratorCommand } from "./generator-command";
 
 var fs = require("fs");
 var chalk = require("chalk");
 
-export class FileGeneratorCommand implements ICommand {
+export class FileGeneratorCommand extends GeneratorCommand implements ICommand {
   alterations: MethodGeneratorCommand[] = [];
   destPath: string;
   subType: string;
   subTypeFiles: { file: string; resFile: string }[];
   fileExt: string;
-  patternDataList: PatternData[];
   description: string;
-  command: string;
   options: any[];
   templatePath: string;
   suffix: string;
@@ -36,8 +35,8 @@ export class FileGeneratorCommand implements ICommand {
     methodChainList: any[],
     autoCreateFolders = false
   ) {
+    super(command, _.clone(patterns));
     this.templatePath = templatePath;
-    this.command = command;
     this.description = description;
     this.options = options;
     this.destPath = destPath;
@@ -45,7 +44,6 @@ export class FileGeneratorCommand implements ICommand {
     this.subTypeFiles = subTypeFiles;
     this.suffix = suffix;
     this.fileExt = fileExt;
-    this.patternDataList = _.clone(patterns);
     this.methodChainList = methodChainList;
     this.autoCreateFolders =
       typeof autoCreateFolders === undefined ? false : autoCreateFolders;
@@ -63,25 +61,9 @@ export class FileGeneratorCommand implements ICommand {
   }
 
   async action(entryList: any) {
-    console.log(
-      chalk.greenBright(
-        this.command.charAt(0).toUpperCase() +
-        this.command.substring(1) +
-        " command called"
-      )
-    );
-
-    if (entryList.length == 0) {
-      console.log(chalk.red("NO ARGS!!!"));
-      process.exit();
-    }
-
-    const entity = entryList[0];
+    
 
     this.patternDataList.forEach((pattern, index) => {
-      // if (entryList.length > index) {
-      //   pattern.val = entryList[index];
-      // }
       const entryForPattern = entryList.filter((e: any) => e.startsWith(pattern.val));
       if (entryForPattern.length > 0) {
         pattern.val = entryForPattern[0].replace(`${pattern.val}:`, '');
@@ -107,7 +89,6 @@ export class FileGeneratorCommand implements ICommand {
             chalk.magenta(`You already created this file! (${filePath})`)
           );
 
-          // Do something
           return;
         } else if (!fs.existsSync(folderPath)) {
           fs.mkdirSync(folderPath);
@@ -143,14 +124,7 @@ export class FileGeneratorCommand implements ICommand {
       alteration.action(entryList);
     });
   }
-  getFileName(filePath: string) {
-    const result = new FileInterpreter().interpret(
-      filePath,
-      this.patternDataList
-    );
-
-    return result;
-  }
+  
 
   setAlterations(alterations: MethodGeneratorCommand[]) {
     this.alterations = alterations;

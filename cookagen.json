@@ -23,7 +23,7 @@
         {
             "cmd": "repo",
             "alias": "r",
-            "targetFolder": "LegalRegister.Repositories/{{$ENTITY}}",
+            "targetFolder": "Repositories/{{$ENTITY}}",
             "autoCreateFolders": true,
             "templateRoot": "repositories",
             "templates": [
@@ -47,7 +47,7 @@
         {
             "cmd": "service",
             "alias": "s",
-            "targetFolder": "LegalRegister.Services/{{$ENTITY}}",
+            "targetFolder": "Services/{{$ENTITY}}",
             "autoCreateFolders": true,
             "templateRoot": "services",
             "templates": [
@@ -78,7 +78,7 @@
         {
             "cmd": "validation",
             "alias": "v",
-            "targetFolder": "LegalRegister.Validation/{{$ENTITY}}",
+            "targetFolder": "Validation/{{$ENTITY}}",
             "autoCreateFolders": true,
             "templateRoot": "validation",
             "templates": [
@@ -101,7 +101,7 @@
             "alterations": [
                 {
                     "name": "validationFactory",
-                    "targetFolder": "LegalRegister.Validation/Factory",
+                    "targetFolder": "Validation/Factory",
                     "autoCreateFolders": true,
                     "templateRoot": "validation",
                     "templates": [
@@ -132,7 +132,7 @@
         {
             "cmd": "command",
             "alias": "c",
-            "targetFolder": "LegalRegister.Commands/{{$ENTITY}}",
+            "targetFolder": "Commands/{{$ENTITY}}",
             "autoCreateFolders": true,
             "templateRoot": "commands",
             "templates": [

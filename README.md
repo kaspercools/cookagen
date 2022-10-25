@@ -38,6 +38,7 @@ The **cookagen** config needs to contain at least the following keys:
 {
     "templateFolder": ".templates"
     "generators": []
+    "alterations": []
 }
 ```
 
@@ -51,7 +52,7 @@ To add a generator you need to define at least the following key attributes:
 {
     "cmd": "domain",
     "alias": "d",
-    "targetFolder": "LegalRegister.Domain",
+    "targetFolder": "Domain",
     "templateRoot": "domain",
     "templates": [
         {
@@ -109,7 +110,7 @@ Alterations can be used to add extra functionality to existing files.
 "alterations": [
     {
         "name":"validationFactory",
-        "targetFolder": "LegalRegister.Validation/Factory",
+        "targetFolder": "Validation/Factory",
         "autoCreateFolders": true,
         "templateRoot": "validation",
         "templates": [
