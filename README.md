@@ -168,3 +168,9 @@ Example usage:
 // multiple function chaining
 {{$ENTITY | camelCase | plural}}
 ```
+
+## License
+
+All source code is made available under a BSD 3-clause license. You can freely
+use and modify the code, without warranty, so long as you provide attribution
+to the authors. See `LICENSE.md` for the full license text.
