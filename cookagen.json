@@ -51,7 +51,7 @@
         {
             "cmd": "repo",
             "alias": "r",
-            "targetFolder": "LegalRegister.Repositories/{{$ENTITY}}",
+            "targetFolder": "Repositories/{{$ENTITY}}",
             "autoCreateFolders": true,
             "templateRoot": "repositories",
             "templates": [
